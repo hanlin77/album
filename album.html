@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>相册</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/public_album.css">
+    <link rel="stylesheet" type="text/css" media="screen and (min-width:1000px)" href="css/large_album.css">
+    <link rel="stylesheet" type="text/css" media="screen and (max-width:999px)" href="css/small_album.css">
+    <link rel="stylesheet" href="css/iconfont.css">
+
+    <script src="javascript/flexible.debug.js"></script>
+    <script src="javascript/flexible_css.debug.js"></script>
+</head>
+
+<body>
+    <header id="header0">
+        <h1>相册</h1>
+        <nav id="rightDiv">
+            <span class="headerLink selected">广场</span>
+            <span class="headerLink">筛选</span>
+            <span class="headerLink">我的</span>
+        </nav>
+    </header>
+    <div class="contentDiv">
+        <!-- Filter -->
+        <div class="filterDiv">
+            <div class="filterPositionDiv">
+                <div class="filterForm">
+                    <span>地点：</span>
+                    <input type="text" onkeypress="positionOnkeypress()" maxlength="10">
+                    <button><img src="image/search.png"></button>
+                </div>
+                <div class="hotKeywordsDiv">
+                    <span>热门：</span>
+                    <p>云南</p>
+                    <p>贵州</p>
+                    <p>江苏</p>
+                </div>
+                <div class="selectedPositionDiv">
+                    <div class="selectedPosition">
+                        <span onclick="cancelSelectedPosition(this)"></span>
+                        <span class="cancelSelectedPosition" onclick="cancelSelectedPosition(this)">x</span>
+                    </div>
+                </div>
+            </div>
+            <div class="filterTabDiv">
+                <div class="filterForm">
+                    <span>标签：</span>
+                    <input type="text" onkeypress="tabOnkeypress()" maxlength="10">
+                    <button><img src="image/search.png"></button>
+                </div>
+                <div class="hotKeywordsDiv">
+                    <span>热门：</span>
+                    <p>海岛</p>
+                    <p>樱花</p>
+                </div>
+                <div class="selectedTabDiv">
+                    <div class="selectedTab">
+                        <span onclick="cancelSelectedTab(this)"></span>
+                        <span class="cancelSelectedTab" onclick="cancelSelectedTab(this)">x</span>
+                    </div>
+                </div>
+            </div>
+            <div class="filterMonthDiv">
+                <span>时间：</span>
+                <ul>
+                    <li>1月</li>
+                    <li>2月</li>
+                    <li>3月</li>
+                    <li>4月</li>
+                    <li>5月</li>
+                    <li>6月</li>
+                    <li>7月</li>
+                    <li>8月</li>
+                    <li>9月</li>
+                    <li>10月</li>
+                    <li>11月</li>
+                    <li>12月</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Album List -->
+        <div class="albumGroup">
+            <section class="albumSection">
+                <div class="photoDiv">
+                    <div class="photoScroll">
+                        
+                    </div>
+                </div>
+                <div class="infoDiv">
+                    <div class="position">
+                        <span class="iconfont icon-yiliaohangyedeICON-"></span>
+                        <span class="positionContent"></span>
+                    </div>
+                    <div class="author">
+                        <img src="">
+                        <span class="authorName"></span>
+                    </div>
+                    <div class="tabGroup">
+                        <div class="tab">
+                            <span class="iconfont icon-biaoqian"></span>
+                            <span class="tabContent"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- myDIv -->
+    <div class="myDiv">
+        <header>
+            <img class="headImg">
+            <p class="myName"></p>
+        </header>
+        <div class="myMenu">
+            <div class="myMenuCircle">
+                <span class="myAlbumNav">我的<br>相册</span>
+                <span class="myCollectionNav">我的<br>收藏</span>
+                <span class="myOverviewNav">旅程<br>总览</span>
+                <span class="mySettingNav">我的<br>设置</span>
+                <span class="myUnknowNav">上传<br>照片</span>
+            </div>
+            <div>
+                <div class="selectedCircle"></div>
+                <div class="selectedHandle"></div>
+            </div>
+        </div>
+        <div class="myContentDiv">
+            <div class="myAlbumBox">
+                <div class="myAlbumContent">
+                    <section class="albumSection">
+                        <div class="photoDiv">
+                            <div class="photoScroll">
+                                
+                            </div>
+                        </div>
+                        <div class="infoDiv">
+                            <div class="position">
+                                <span class="iconfont icon-yiliaohangyedeICON-"></span>
+                                <span class="positionContent"></span>
+                            </div>
+                            <div class="author">
+                                <img src="">
+                                <span class="authorName"></span>
+                            </div>
+                            <div class="tabGroup">
+                                <div class="tab">
+                                    <span class="iconfont icon-biaoqian"></span>
+                                    <span class="tabContent"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="myCollectionBox">
+                <p>收藏功能暂未开放</p>
+            </div>
+            <div class="myOverviewBox">
+                <p>总览功能暂未开放</p>
+            </div>
+            <div class="mySettingBox">
+                <p>设置功能暂未开放</p>
+            </div>
+            <div class="myUnkonwBox">
+                <p>上传功能暂未开放</p>
+            </div>
+        </div>
+    </div>
+    <footer class="bottomLine">
+        <p>没有更多了</p>
+    </footer>
+    <script src="javascript/album.js"></script>
+</body>
+
+</html>
