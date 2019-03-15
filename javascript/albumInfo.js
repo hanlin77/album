@@ -62,7 +62,7 @@ var albumInfo = [{
         "image/bird/p1.jpg",
         "image/bird/p2.jpg",
         "image/bird/p3.jpg",
-        "image/bird/p4.jpg",
+        "image/bird/p4.jpg"||"image/bird/p4.JPG",
         "image/bird/p5.jpg",
         "image/bird/p6.jpg"
     ],
