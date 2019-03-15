@@ -33,8 +33,8 @@ var albumInfo = [{
     "position": "印度尼西亚·巴厘岛",
     "tab": ["海岛"],
     "author": {
-        "id": "18810854186",
-        "name": "Lena2",
+        "id": "18810854185",
+        "name": "Lena",
         "head": "image/touxiang.jpg"
     },
     "uploadTime": "2019/03/01 20:42",
@@ -107,8 +107,8 @@ var albumInfo = [{
     "position": "广西·涠洲岛",
     "tab": ["海岛", "落日"],
     "author": {
-        "id": "18810854186",
-        "name": "Lena2",
+        "id": "18810854185",
+        "name": "Lena",
         "head": "image/touxiang.jpg"
     },
     "uploadTime": "2019/03/01 13:57",
@@ -150,4 +150,36 @@ var albumInfo = [{
     },
     "uploadTime": "2019/03/01 12:31",
     "takePictureTime": "2017/07/10"
+}, {
+    "src": [
+        "image/flowers/p1.jpg",
+        "image/flowers/p2.jpg",
+        "image/flowers/p3.jpg",
+        "image/flowers/p4.jpg"
+    ],
+    "position": "北京·顺义",
+    "tab": ["鲜花港", "郁金香"],
+    "author": {
+        "id": "18810854185",
+        "name": "Lena",
+        "head": "image/touxiang.jpg"
+    },
+    "uploadTime": "2019/03/01 12:02",
+    "takePictureTime": "2017/05/05"
+}, {
+    "src": [
+        "image/snow/p1.jpg",
+        "image/snow/p2.jpg",
+        "image/snow/p3.jpg",
+        "image/snow/p4.jpg"
+    ],
+    "position": "江苏·苏州",
+    "tab": ["雪景"],
+    "author": {
+        "id": "18810854185",
+        "name": "Lena",
+        "head": "image/touxiang.jpg"
+    },
+    "uploadTime": "2019/03/01 11:30",
+    "takePictureTime": "2018/12/24"
 }];
