@@ -23,26 +23,26 @@ function btnSelected(x) {
     headerBtns[x].className = "headerLink selected";
 }
 
-let filterMove;
+var filterMove;
 
 headerBtns[0].onclick = () => {
 
     //删除所有筛选条件
     let selectedPosition = filterBox.getElementsByClassName("selectedPosition");
     let selectedTab = filterBox.getElementsByClassName("selectedTab");
-    for(let i=1; i<selectedPosition.length; i++) {
+    for (let i = 1; i < selectedPosition.length; i++) {
         removeSelected(selectedPosition[i].children[0], selectedPositions);
     }
-    for(let j=1; j<selectedTab.length; j++) {
+    for (let j = 1; j < selectedTab.length; j++) {
         removeSelected(selectedTab[j].children[0], selectedTabs);
     }
     selectedMonths = [];
     let filterMonthLi = document.getElementsByClassName("filterMonthDiv")[0].getElementsByTagName("li");
-    for(let i=0; i<filterMonthLi.length; i++) {
+    for (let i = 0; i < filterMonthLi.length; i++) {
         filterMonthLi[i].className = "";
     }
     pureFilter();
-    
+
     clearInterval(filterMove);
     btnSelected("0");
     squareBox.style.display = "block";
@@ -52,13 +52,14 @@ headerBtns[0].onclick = () => {
 }
 
 function openFilterBox() {
+
     btnSelected("1");
     squareBox.style.display = "block";
     filterBox.style.display = "block";
     myBox.style.display = "none";
-    
+
     if (parseInt(albumGroup.style.marginTop) === 0) {
-        albumGroup.style.marginTop =(-filterBox.offsetHeight-40)+"px";
+        albumGroup.style.marginTop = (-filterBox.offsetHeight - 40) + "px";
         filterMove = setInterval(() => {
             if (parseInt(albumGroup.style.marginTop) >= -5) {
                 clearInterval(filterMove);
@@ -74,6 +75,7 @@ function openFilterBox() {
 
 headerBtns[1].onclick = () => {
     openFilterBox();
+    insetHotKeyword();
 }
 
 headerBtns[2].onclick = () => {
@@ -81,6 +83,20 @@ headerBtns[2].onclick = () => {
     squareBox.style.display = "none";
     myBox.style.display = "block";
     albumGroup.style.marginTop = "-5px";
+
+    //我的相册中的数据导入
+
+    let myAlbumContent = myContentBoxs[0].getElementsByClassName("myAlbumContent")[0];
+    let myAlbumInfo = [];
+
+    for (let i = 0; i < albumInfo.length; i++) {
+        if (albumInfo[i].author.id === id18810854185.id) {
+            myAlbumInfo.push(albumInfo[i]);
+        }
+    }
+
+    showAlbum(myAlbumInfo, myAlbumContent);
+
 }
 
 //把数据插入html
@@ -105,7 +121,7 @@ function showAlbum(info, where) {
         photoScroll.appendChild(document.createElement("p"));
         let afterLastPhoto = photoScroll.getElementsByTagName("p")[0];
         afterLastPhoto.className = "afterLastPhoto";
-        afterLastPhoto.innerHTML = "拍摄于<br>"+info[i].takePictureTime;
+        afterLastPhoto.innerHTML = "拍摄于<br>" + info[i].takePictureTime;
 
 
         //position
@@ -126,7 +142,7 @@ function showAlbum(info, where) {
         authorBox.getElementsByTagName("img")[0].src = info[i].author.head;
         authorBox.getElementsByClassName("authorName")[0].innerHTML = info[i].author.name;
     }
-    
+
 }
 
 
@@ -163,8 +179,8 @@ function pureFilter() {
             }
         }
 
-        for(let k = 0; k < selectedMonths.length; k++) {
-            if((albumInfo[i].takePictureTime[5]+albumInfo[i].takePictureTime[6]).indexOf(selectedMonths[k]) === -1) {
+        for (let k = 0; k < selectedMonths.length; k++) {
+            if ((albumInfo[i].takePictureTime[5] + albumInfo[i].takePictureTime[6]).indexOf(selectedMonths[k]) === -1) {
                 monthNum++;
             }
             else {
@@ -174,18 +190,18 @@ function pureFilter() {
         }
 
         if (positionNum === 0 && tabNum === 0 && monthNum === 0) {
-            albumSections[i+1].style.display = "block";
+            albumSections[i + 1].style.display = "block";
         }
         else {
-            albumSections[i+1].style.display = "none";
+            albumSections[i + 1].style.display = "none";
         }
     }
-    function scrollToTop(){
+    function scrollToTop() {
         let currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
         let header0 = document.getElementById("header0");
         if (currentScroll > header0.offsetHeight + 20) {
-             window.requestAnimationFrame(scrollToTop);
-             window.scrollTo (0,currentScroll - (currentScroll/5));
+            window.requestAnimationFrame(scrollToTop);
+            window.scrollTo(0, currentScroll - (currentScroll / 5));
         }
     }
     scrollToTop();
@@ -242,11 +258,11 @@ function tabFilter(value) {
 function monthFilter() {
 
     var filterMonthLi = document.getElementsByClassName("filterMonthDiv")[0].getElementsByTagName("li");
-    
-    for(let i=0; i<filterMonthLi.length; i++) {
-        let index = i<9 ? "0"+(i+1) : i+1;
+
+    for (let i = 0; i < filterMonthLi.length; i++) {
+        let index = i < 9 ? "0" + (i + 1) : i + 1;
         filterMonthLi[i].onclick = () => {
-            if(!filterMonthLi[i].className) {
+            if (!filterMonthLi[i].className) {
                 filterMonthLi[i].className = "selectedMonth";
                 selectedMonths.push(index.toString());
                 pureFilter();
@@ -273,13 +289,13 @@ filterBtns[1].onclick = () => {
     filterInputs[1].value = "";
 }
 function positionOnkeypress() {
-    if(event.keyCode === 13) {
+    if (event.keyCode === 13) {
         positionFilter(filterInputs[0].value);
         filterInputs[0].value = "";
     }
 }
 function tabOnkeypress() {
-    if(event.keyCode === 13) {
+    if (event.keyCode === 13) {
         tabFilter(filterInputs[1].value);
         filterInputs[1].value = "";
     }
@@ -291,16 +307,16 @@ function clickAlbumFilter() {
 
     var albumPositions = document.getElementsByClassName("position");
     var albumTabs = document.getElementsByClassName("tab");
-    
-    for(let i=0; i<albumPositions.length; i++) {
+
+    for (let i = 0; i < albumPositions.length; i++) {
         albumPositions[i].onclick = () => {
             openFilterBox();
             let positionContent = albumPositions[i].getElementsByClassName("positionContent")[0];
             positionFilter(positionContent.innerHTML);
         }
     }
-    
-    for(let i=0; i<albumTabs.length; i++) {
+
+    for (let i = 0; i < albumTabs.length; i++) {
         albumTabs[i].onclick = () => {
             openFilterBox();
             let tabContent = albumTabs[i].getElementsByClassName("tabContent")[0];
@@ -311,24 +327,26 @@ function clickAlbumFilter() {
 
 clickAlbumFilter();
 
-//热门关键词
+//插入热门关键词
 
-var hotPositions = filterBox.getElementsByClassName("hotKeywordsDiv")[0].getElementsByTagName("p");
-var hotTabs = filterBox.getElementsByClassName("hotKeywordsDiv")[1].getElementsByTagName("p");
+function insetHotKeyword() {
 
-
-
-for(let i=0; i<hotPositions.length; i++) {
-    hotPositions[i].onclick = () => {
-        positionFilter(hotPositions[i].innerHTML);
+    let hotPositions = filterBox.getElementsByClassName("hotKeywordsDiv")[0].getElementsByTagName("p");
+    let hotTabs = filterBox.getElementsByClassName("hotKeywordsDiv")[1].getElementsByTagName("p");
+    
+    for (let i = 0; i < hotPositions.length; i++) {
+        hotPositions[i].onclick = () => {
+            positionFilter(hotPositions[i].innerHTML);
+        }
+    }
+    
+    for (let i = 0; i < hotTabs.length; i++) {
+        hotTabs[i].onclick = () => {
+            tabFilter(hotTabs[i].innerHTML);
+        }
     }
 }
 
-for(let i=0; i<hotTabs.length; i++) {
-    hotTabs[i].onclick = () => {
-        tabFilter(hotTabs[i].innerHTML);
-    }
-}
 
 //删除关键词
 
@@ -338,17 +356,17 @@ function removeSelected(obj, arr) {
     arr.splice(cancelkeyword, 1);
 }
 
-function cancelSelectedPosition(obj){
+function cancelSelectedPosition(obj) {
     obj.parentNode.className = "selectedPosition cancelingKeyword"
-    setTimeout( () => {
+    setTimeout(() => {
         removeSelected(obj, selectedPositions);
         pureFilter();
     }, 200);
 }
 
-function cancelSelectedTab(obj){
+function cancelSelectedTab(obj) {
     obj.parentNode.className = "selectedTab cancelingKeyword"
-    setTimeout( () => {
+    setTimeout(() => {
         removeSelected(obj, selectedTabs);
         pureFilter();
     }, 200);
@@ -368,13 +386,13 @@ var myContentBoxs = myBox.getElementsByClassName("myContentDiv")[0].children;
 
 function myNavTurn() {
     var myNavs = myMenuCircle.getElementsByTagName("span");
-    
+
     function getDeg(x, y) {
-        let deg = Math.round(Math.atan(x/y) / (Math.PI / 180));
-        if(y < 0 && x >= 0) {
+        let deg = Math.round(Math.atan(x / y) / (Math.PI / 180));
+        if (y < 0 && x >= 0) {
             return deg + 180;
         }
-        else if(y < 0 && x < 0) {
+        else if (y < 0 && x < 0) {
             return deg - 180;
         }
         else {
@@ -384,10 +402,10 @@ function myNavTurn() {
 
     function standardDeg(deg) {
 
-        if(deg >= 180) {
+        if (deg >= 180) {
             return deg - 360;
         }
-        else if(deg < -180) {
+        else if (deg < -180) {
             return deg + 360;
         }
         else {
@@ -397,19 +415,19 @@ function myNavTurn() {
 
     function areaX(finallyDeg) {
         let x = 0;
-        if(finallyDeg >= -36 && finallyDeg < 36) {
+        if (finallyDeg >= -36 && finallyDeg < 36) {
             x = 0;
         }
-        else if(finallyDeg >= 36 && finallyDeg < 108) {
+        else if (finallyDeg >= 36 && finallyDeg < 108) {
             x = 1;
         }
-        else if(finallyDeg >= 108 && finallyDeg < 180) {
+        else if (finallyDeg >= 108 && finallyDeg < 180) {
             x = 2;
         }
-        else if(finallyDeg >= -180 && finallyDeg < -108) {
+        else if (finallyDeg >= -180 && finallyDeg < -108) {
             x = 3;
         }
-        else if (finallyDeg >= -108 && finallyDeg < -36){
+        else if (finallyDeg >= -108 && finallyDeg < -36) {
             x = 4;
         }
         else {
@@ -419,7 +437,7 @@ function myNavTurn() {
     }
 
 
-    for(let i=0; i<myNavs.length; i++) {
+    for (let i = 0; i < myNavs.length; i++) {
         myNavs[i].onmousedown = (event) => {
             let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
             let transformArr = currentTransform.split("(")[1].split(",");
@@ -427,18 +445,18 @@ function myNavTurn() {
 
             let scrollX = document.documentElement.scrollLeft;
             let scrollY = document.documentElement.scrollTop;
-            let x = -myMenu.offsetLeft-myBox.offsetLeft-100+scrollX;
-            let y = 100+myMenu.offsetTop+myBox.offsetTop-scrollY;
-            let userOriDeg = getDeg(event.clientX+x, y-event.clientY);
+            let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
+            let y = 100 + myMenu.offsetTop + myBox.offsetTop - scrollY;
+            let userOriDeg = getDeg(event.clientX + x, y - event.clientY);
             let addDeg = originalDeg - userOriDeg;
 
             let finallyDeg = 0;
 
             document.onmousemove = (event) => {
-                finallyDeg = standardDeg(addDeg + getDeg(event.clientX+x, y-event.clientY));
+                finallyDeg = standardDeg(addDeg + getDeg(event.clientX + x, y - event.clientY));
 
                 myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
-                for(let j=0; j<myNavs.length; j++) {
+                for (let j = 0; j < myNavs.length; j++) {
                     myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
                     myNavs[j].style.fontWeight = "400";
                 }
@@ -446,33 +464,33 @@ function myNavTurn() {
 
                 document.onmouseup = () => {
                     document.onmousemove = null;
-    
+
                     function selectedMyNav(targetDeg) {
                         let selectedMyNavMove = setInterval(() => {
                             let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
                             let transformArr = currentTransform.split("(")[1].split(",");
                             let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
-    
+
                             let speed = (targetDeg - currentDeg) / 8;
                             myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
-                            for(let k=0; k<myNavs.length; k++) {
+                            for (let k = 0; k < myNavs.length; k++) {
                                 myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
                             }
-    
-                            if(Math.abs(speed) < 0.6) {
+
+                            if (Math.abs(speed) < 0.6) {
                                 clearInterval(selectedMyNavMove);
                                 myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
-                                for(let k=0; k<myNavs.length; k++) {
+                                for (let k = 0; k < myNavs.length; k++) {
                                     myNavs[k].style.transform = "rotate(" + -targetDeg + "deg)";
                                 }
                             }
                         }, 20);
                     }
-    
+
                     let targetDegs = [0, 72, 144, -144, -72];
                     selectedMyNav(targetDegs[areaX(finallyDeg)]);
-    
-                    for(let l=0; l<myContentBoxs.length; l++) {
+
+                    for (let l = 0; l < myContentBoxs.length; l++) {
                         myContentBoxs[l].style.display = "none";
                     }
                     myContentBoxs[areaX(finallyDeg)].style.display = "block";
@@ -481,7 +499,7 @@ function myNavTurn() {
         }
     }
 
-    for(let i=0; i<myNavs.length; i++) {
+    for (let i = 0; i < myNavs.length; i++) {
 
         myNavs[i].ontouchstart = (event) => {
             let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
@@ -490,17 +508,17 @@ function myNavTurn() {
 
             let scrollX = document.documentElement.scrollLeft;
             let scrollY = document.documentElement.scrollTop;
-            let x = -myMenu.offsetLeft-myBox.offsetLeft-100+scrollX;
-            let y = 100+myMenu.offsetTop+myBox.offsetTop-scrollY;
+            let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
+            let y = 100 + myMenu.offsetTop + myBox.offsetTop - scrollY;
             let touch = event.touches[0];
-            let userOriDeg = getDeg(touch.pageX+x, y-touch.pageY);
+            let userOriDeg = getDeg(touch.pageX + x, y - touch.pageY);
             let addDeg = originalDeg - userOriDeg;
 
             let finallyDeg = 0;
 
             myNavs[i].ontouchmove = (event) => {
 
-                myNavs[i].addEventListener('touchmove', function(event) {
+                myNavs[i].addEventListener('touchmove', function (event) {
                     // 判断默认行为是否可以被禁用
                     if (event.cancelable) {
                         // 判断默认行为是否已经被禁用
@@ -509,12 +527,12 @@ function myNavTurn() {
                         }
                     }
                 }, false);
-            
+
                 touch = event.touches[0];
-                finallyDeg = standardDeg(addDeg + getDeg(touch.pageX+x, y-touch.pageY));
+                finallyDeg = standardDeg(addDeg + getDeg(touch.pageX + x, y - touch.pageY));
 
                 myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
-                for(let j=0; j<myNavs.length; j++) {
+                for (let j = 0; j < myNavs.length; j++) {
                     myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
                     myNavs[j].style.fontWeight = "400";
                 }
@@ -522,33 +540,33 @@ function myNavTurn() {
 
                 myNavs[i].ontouchend = () => {
                     document.onmousemove = null;
-    
+
                     function selectedMyNav(targetDeg) {
                         let selectedMyNavMove = setInterval(() => {
                             let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
                             let transformArr = currentTransform.split("(")[1].split(",");
                             let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
-    
+
                             let speed = (targetDeg - currentDeg) / 8;
                             myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
-                            for(let k=0; k<myNavs.length; k++) {
+                            for (let k = 0; k < myNavs.length; k++) {
                                 myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
                             }
-    
-                            if(Math.abs(speed) < 0.6) {
+
+                            if (Math.abs(speed) < 0.6) {
                                 clearInterval(selectedMyNavMove);
                                 myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
-                                for(let k=0; k<myNavs.length; k++) {
+                                for (let k = 0; k < myNavs.length; k++) {
                                     myNavs[k].style.transform = "rotate(" + -targetDeg + "deg)";
                                 }
                             }
                         }, 20);
                     }
-    
+
                     let targetDegs = [0, 72, 144, -144, -72];
                     selectedMyNav(targetDegs[areaX(finallyDeg)]);
-    
-                    for(let l=0; l<myContentBoxs.length; l++) {
+
+                    for (let l = 0; l < myContentBoxs.length; l++) {
                         myContentBoxs[l].style.display = "none";
                     }
                     myContentBoxs[areaX(finallyDeg)].style.display = "block";
@@ -559,21 +577,5 @@ function myNavTurn() {
 }
 
 myNavTurn();
-
-
-//我的相册中的数据导入
-
-var myAlbumContent = myContentBoxs[0].getElementsByClassName("myAlbumContent")[0];
-var myAlbumInfo = [];
-
-for(let i=0; i<albumInfo.length; i++) {
-    if(albumInfo[i].author.id === id18810854185.id) {
-        myAlbumInfo.push(albumInfo[i]);
-    }
-}
-
-showAlbum(myAlbumInfo, myAlbumContent);
-
-clickAlbumFilter();
 
 
