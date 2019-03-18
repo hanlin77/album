@@ -83,20 +83,6 @@ headerBtns[2].onclick = () => {
     squareBox.style.display = "none";
     myBox.style.display = "block";
     albumGroup.style.marginTop = "-5px";
-
-    //我的相册中的数据导入
-
-    let myAlbumContent = myContentBoxs[0].getElementsByClassName("myAlbumContent")[0];
-    let myAlbumInfo = [];
-
-    for (let i = 0; i < albumInfo.length; i++) {
-        if (albumInfo[i].author.id === id18810854185.id) {
-            myAlbumInfo.push(albumInfo[i]);
-        }
-    }
-
-    showAlbum(myAlbumInfo, myAlbumContent);
-
 }
 
 //把数据插入html
@@ -539,7 +525,7 @@ function myNavTurn() {
                 myNavs[areaX(finallyDeg)].style.fontWeight = "800";
 
                 myNavs[i].ontouchend = () => {
-                    document.onmousemove = null;
+                    document.ontouchmove = null;
 
                     function selectedMyNav(targetDeg) {
                         let selectedMyNavMove = setInterval(() => {
@@ -577,5 +563,23 @@ function myNavTurn() {
 }
 
 myNavTurn();
+
+//我的相册中的数据导入
+
+function showMyAlbum() {
+
+    let myAlbumContent = myContentBoxs[0].getElementsByClassName("myAlbumContent")[0];
+    let myAlbumInfo = [];
+    
+    for (let i = 0; i < albumInfo.length; i++) {
+        if (albumInfo[i].author.id === id18810854185.id) {
+            myAlbumInfo.push(albumInfo[i]);
+        }
+    }
+    
+    showAlbum(myAlbumInfo, myAlbumContent);
+}
+
+showMyAlbum();
 
 

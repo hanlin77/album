@@ -104,6 +104,10 @@
 .infoDiv .position .icon-yiliaohangyedeICON- {
     font-size: 20px !important;
 }
+.infoDiv .tab .icon-biaoqian {
+    margin-top: -2px;
+    font-size: 22px !important;
+}
 .infoDiv .positionContent {
     font-size: 14px;
 }
