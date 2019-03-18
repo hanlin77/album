@@ -366,11 +366,11 @@ myBox.getElementsByClassName("myName")[0].innerHTML = id18810854185.name;
 
 //转动导航栏
 
-var myMenu = myBox.getElementsByClassName("myMenu")[0];
-var myMenuCircle = myBox.getElementsByClassName("myMenuCircle")[0];
 var myContentBoxs = myBox.getElementsByClassName("myContentDiv")[0].children;
 
 function myNavTurn() {
+    var myMenu = myBox.getElementsByClassName("myMenu")[0];
+    var myMenuCircle = myBox.getElementsByClassName("myMenuCircle")[0];
     var myNavs = myMenuCircle.getElementsByTagName("span");
 
     function getDeg(x, y) {
@@ -423,142 +423,156 @@ function myNavTurn() {
     }
 
 
-    for (let i = 0; i < myNavs.length; i++) {
-        myNavs[i].onmousedown = (event) => {
-            let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
-            let transformArr = currentTransform.split("(")[1].split(",");
-            let originalDeg = getDeg(transformArr[1], transformArr[0]);
-
-            let scrollX = document.documentElement.scrollLeft;
-            let scrollY = document.documentElement.scrollTop;
-            let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
-            let y = 100 + myMenu.offsetTop + myBox.offsetTop - scrollY;
-            let userOriDeg = getDeg(event.clientX + x, y - event.clientY);
-            let addDeg = originalDeg - userOriDeg;
-
-            let finallyDeg = 0;
-
-            document.onmousemove = (event) => {
-                finallyDeg = standardDeg(addDeg + getDeg(event.clientX + x, y - event.clientY));
-
-                myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
-                for (let j = 0; j < myNavs.length; j++) {
-                    myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
-                    myNavs[j].style.fontWeight = "400";
-                }
-                myNavs[areaX(finallyDeg)].style.fontWeight = "800";
-
-                document.onmouseup = () => {
-                    document.onmousemove = null;
-
-                    function selectedMyNav(targetDeg) {
-                        let selectedMyNavMove = setInterval(() => {
-                            let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
-                            let transformArr = currentTransform.split("(")[1].split(",");
-                            let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
-
-                            let speed = (targetDeg - currentDeg) / 8;
-                            myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
-                            for (let k = 0; k < myNavs.length; k++) {
-                                myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
-                            }
-
-                            if (Math.abs(speed) < 0.6) {
-                                clearInterval(selectedMyNavMove);
-                                myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
+    function pcTurn() {
+        for (let i = 0; i < myNavs.length; i++) {
+    
+            myNavs[i].onmousedown = (event) => {
+                let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
+                let transformArr = currentTransform.split("(")[1].split(",");
+                let originalDeg = getDeg(transformArr[1], transformArr[0]);
+    
+                let scrollX = document.documentElement.scrollLeft;
+                let scrollY = document.documentElement.scrollTop;
+                let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
+                let y = 100 + myMenu.offsetTop + myBox.offsetTop - scrollY;
+                let userOriDeg = getDeg(event.clientX + x, y - event.clientY);
+                let addDeg = originalDeg - userOriDeg;
+    
+                let finallyDeg = 0;
+    
+                document.onmousemove = (event) => {
+                    finallyDeg = standardDeg(addDeg + getDeg(event.clientX + x, y - event.clientY));
+    
+                    myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
+                    for (let j = 0; j < myNavs.length; j++) {
+                        myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
+                        myNavs[j].style.fontWeight = "400";
+                    }
+                    myNavs[areaX(finallyDeg)].style.fontWeight = "800";
+    
+                    document.onmouseup = () => {
+                        document.onmousemove = null;
+    
+                        function selectedMyNav(targetDeg) {
+                            let selectedMyNavMove = setInterval(() => {
+                                let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
+                                let transformArr = currentTransform.split("(")[1].split(",");
+                                let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
+    
+                                let speed = (targetDeg - currentDeg) / 8;
+                                myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
                                 for (let k = 0; k < myNavs.length; k++) {
-                                    myNavs[k].style.transform = "rotate(" + -targetDeg + "deg)";
+                                    myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
                                 }
-                            }
-                        }, 20);
+    
+                                if (Math.abs(speed) < 0.6) {
+                                    clearInterval(selectedMyNavMove);
+                                    myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
+                                    for (let k = 0; k < myNavs.length; k++) {
+                                        myNavs[k].style.transform = "rotate(" + -targetDeg + "deg)";
+                                    }
+                                }
+                            }, 20);
+                        }
+    
+                        let targetDegs = [0, 72, 144, -144, -72];
+                        selectedMyNav(targetDegs[areaX(finallyDeg)]);
+    
+                        for (let l = 0; l < myContentBoxs.length; l++) {
+                            myContentBoxs[l].style.display = "none";
+                        }
+                        myContentBoxs[areaX(finallyDeg)].style.display = "block";
                     }
-
-                    let targetDegs = [0, 72, 144, -144, -72];
-                    selectedMyNav(targetDegs[areaX(finallyDeg)]);
-
-                    for (let l = 0; l < myContentBoxs.length; l++) {
-                        myContentBoxs[l].style.display = "none";
-                    }
-                    myContentBoxs[areaX(finallyDeg)].style.display = "block";
                 }
             }
         }
     }
 
-    for (let i = 0; i < myNavs.length; i++) {
-
-        myNavs[i].ontouchstart = (event) => {
-            let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
-            let transformArr = currentTransform.split("(")[1].split(",");
-            let originalDeg = getDeg(transformArr[1], transformArr[0]);
-
-            let scrollX = document.documentElement.scrollLeft;
-            let scrollY = document.documentElement.scrollTop;
-            let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
-            let y = 100 + myMenu.offsetTop + myBox.offsetTop - scrollY;
-            let touch = event.touches[0];
-            let userOriDeg = getDeg(touch.pageX + x, y - touch.pageY);
-            let addDeg = originalDeg - userOriDeg;
-
-            let finallyDeg = 0;
-
-            myNavs[i].ontouchmove = (event) => {
-
+    function mobileTurn() {
+        for (let i = 0; i < myNavs.length; i++) {
+    
+            myNavs[i].ontouchstart = (event) => {
+                let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
+                let transformArr = currentTransform.split("(")[1].split(",");
+                let originalDeg = getDeg(transformArr[1], transformArr[0]);
+    
+                let scrollX = document.documentElement.scrollLeft;
+                let scrollY = document.documentElement.scrollTop;
+                let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
+                let y = 100 + myMenu.offsetTop + myBox.offsetTop - scrollY;
+                let touch = event.touches[0];
+                let userOriDeg = getDeg(touch.pageX + x, y - touch.pageY);
+                let addDeg = originalDeg - userOriDeg;
+    
+                let finallyDeg = 0;
+    
+                //禁用默认行为
                 myNavs[i].addEventListener('touchmove', function (event) {
-                    // 判断默认行为是否可以被禁用
+    
                     if (event.cancelable) {
-                        // 判断默认行为是否已经被禁用
                         if (!event.defaultPrevented) {
                             event.preventDefault();
                         }
                     }
                 }, false);
-
-                touch = event.touches[0];
-                finallyDeg = standardDeg(addDeg + getDeg(touch.pageX + x, y - touch.pageY));
-
-                myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
-                for (let j = 0; j < myNavs.length; j++) {
-                    myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
-                    myNavs[j].style.fontWeight = "400";
-                }
-                myNavs[areaX(finallyDeg)].style.fontWeight = "800";
-
-                myNavs[i].ontouchend = () => {
-                    document.ontouchmove = null;
-
-                    function selectedMyNav(targetDeg) {
-                        let selectedMyNavMove = setInterval(() => {
-                            let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
-                            let transformArr = currentTransform.split("(")[1].split(",");
-                            let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
-
-                            let speed = (targetDeg - currentDeg) / 8;
-                            myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
-                            for (let k = 0; k < myNavs.length; k++) {
-                                myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
-                            }
-
-                            if (Math.abs(speed) < 0.6) {
-                                clearInterval(selectedMyNavMove);
-                                myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
+    
+                myNavs[i].ontouchend = null;
+    
+                myNavs[i].ontouchmove = (event) => {
+    
+                    touch = event.touches[0];
+                    finallyDeg = standardDeg(addDeg + getDeg(touch.pageX + x, y - touch.pageY));
+    
+                    myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
+                    for (let j = 0; j < myNavs.length; j++) {
+                        myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
+                        myNavs[j].style.fontWeight = "400";
+                    }
+                    myNavs[areaX(finallyDeg)].style.fontWeight = "800";
+    
+                    myNavs[i].ontouchend = () => {
+                        myNavs[i].ontouchmove = null;
+    
+                        function selectedMyNav(targetDeg) {
+                            let selectedMyNavMove = setInterval(() => {
+                                let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
+                                let transformArr = currentTransform.split("(")[1].split(",");
+                                let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
+    
+                                let speed = (targetDeg - currentDeg) / 8;
+                                myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
                                 for (let k = 0; k < myNavs.length; k++) {
-                                    myNavs[k].style.transform = "rotate(" + -targetDeg + "deg)";
+                                    myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
                                 }
-                            }
-                        }, 20);
+    
+                                if (Math.abs(speed) < 0.6) {
+                                    clearInterval(selectedMyNavMove);
+                                    myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
+                                    for (let k = 0; k < myNavs.length; k++) {
+                                        myNavs[k].style.transform = "rotate(" + -targetDeg + "deg)";
+                                    }
+                                }
+                            }, 20);
+                        }
+    
+                        let targetDegs = [0, 72, 144, -144, -72];
+                        selectedMyNav(targetDegs[areaX(finallyDeg)]);
+    
+                        for (let l = 0; l < myContentBoxs.length; l++) {
+                            myContentBoxs[l].style.display = "none";
+                        }
+                        myContentBoxs[areaX(finallyDeg)].style.display = "block";
                     }
-
-                    let targetDegs = [0, 72, 144, -144, -72];
-                    selectedMyNav(targetDegs[areaX(finallyDeg)]);
-
-                    for (let l = 0; l < myContentBoxs.length; l++) {
-                        myContentBoxs[l].style.display = "none";
-                    }
-                    myContentBoxs[areaX(finallyDeg)].style.display = "block";
                 }
             }
         }
+    }
+
+    if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+        mobileTurn();
+    }
+    else {
+        pcTurn();
     }
 }
 
