@@ -113,11 +113,6 @@ body {
 .photoDiv {
     width: 100%;
     height: 250px;
-    overflow: auto;
-}
-.photoScroll {
-    min-width: 980px;
-    white-space: nowrap;
 }
 .photoDiv img {
     height: 240px;

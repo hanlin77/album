@@ -109,6 +109,84 @@ function showAlbum(info, where) {
         afterLastPhoto.className = "afterLastPhoto";
         afterLastPhoto.innerHTML = "拍摄于<br>" + info[i].takePictureTime;
 
+        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+            
+            //图片运动效果
+            let moveInterval = null;
+            function photoMove(target) {
+                let speed = 0;
+                let left = photoScroll.offsetLeft;
+                moveInterval = setInterval(() => {
+                    speed = (target - photoScroll.offsetLeft)/4;
+                    left += speed
+                    photoScroll.style.left = left + "px";
+
+                    if(Math.abs(speed) < 1) {
+                        clearInterval(moveInterval);
+                        photoScroll.style.left = target;
+                    }
+                }, 30)
+
+            }
+            //手势翻页效果
+            photoScroll.ontouchstart = (event) => {
+
+                //阻止默认滑动
+                photoScroll.addEventListener('touchmove', (event) => {
+                    event.preventDefault();
+                }, { passive: false });
+
+                //停止没有结束的计时器
+                clearInterval(moveInterval);
+
+                let originalX = event.touches[0].pageX;
+                let originalLeft = parseInt(window.getComputedStyle(photoScroll, null).getPropertyValue("left"));
+
+                photoScroll.ontouchmove = (event) => {
+                    let disX = event.touches[0].pageX - originalX;
+                    let currentLeft = originalLeft + disX;
+                    if(currentLeft <= 0) {
+                        photoScroll.style.left = currentLeft + "px";
+                    }
+
+                    photoScroll.ontouchend = () => {
+                        //生成目标值数组
+                        let photos = photoScroll.getElementsByTagName("img");
+                        let preWidth = 0;
+                        let targetLefts = [];
+                        for(let j=0; j<photos.length; j++) {
+                            let photoCenter = preWidth + photos[j].offsetWidth/2;
+                            targetLefts.push(-(photoCenter - photoScroll.offsetWidth/2) > 0 ? 0 : -(photoCenter - photoScroll.offsetWidth/2));
+                            preWidth += photos[j].offsetWidth+10;
+                        }
+                        //遍历数组，和当前left进行比较，确定目标值
+                        for(let k=0; k<targetLefts.length; k++) {
+                            if(disX > 0 && targetLefts[targetLefts.length-1-k] > currentLeft) {
+                                photoMove(targetLefts[targetLefts.length-1-k]);
+                                break;
+                            }
+                            if(disX > 0 && targetLefts[0] < currentLeft) {
+                                photoMove(targetLefts[0]);
+                                break;
+                            }
+                            if(disX < 0 && targetLefts[k] < currentLeft) {
+                                photoMove(targetLefts[k]);
+                                break;
+                            }
+                            //如果当前left超出了最后一个目标值，回到最后一个目标值
+                            if(disX < 0 && targetLefts[targetLefts.length-1] > currentLeft) {
+                                photoMove(targetLefts[targetLefts.length-1]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            null;
+        }
+
 
         //position
         let position = albumSections[i + 1].getElementsByClassName("position")[0].getElementsByTagName("span")[1];
@@ -506,15 +584,11 @@ function myNavTurn() {
     
                 let finallyDeg = 0;
     
-                //禁用默认行为
-                myNavs[i].addEventListener('touchmove', function (event) {
-    
-                    if (event.cancelable) {
-                        if (!event.defaultPrevented) {
-                            event.preventDefault();
-                        }
-                    }
-                }, false);
+                //禁用默认滑动
+
+                myNavs[i].addEventListener('touchmove', (event) => {
+                    event.preventDefault();
+                }, { passive: false });
     
                 myNavs[i].ontouchend = null;
     

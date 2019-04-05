@@ -116,6 +116,13 @@
 .albumSection:hover {
     box-shadow: 0px 0px 30px #999;
 }
+.photoDiv {
+    overflow: auto;
+}
+.photoScroll {
+    min-width: 980px;
+    white-space: nowrap;
+}
 .infoDiv {
     height: 30px;
     margin-top: 16px;
