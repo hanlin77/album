@@ -109,9 +109,10 @@ function showAlbum(info, where) {
         afterLastPhoto.className = "afterLastPhoto";
         afterLastPhoto.innerHTML = "拍摄于<br>" + info[i].takePictureTime;
 
+        //移动端滑动效果
         if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
             
-            //图片运动效果
+            //图片归位
             let moveInterval = null;
             function photoMove(target) {
                 let speed = 0;
@@ -132,9 +133,10 @@ function showAlbum(info, where) {
             photoScroll.ontouchstart = (event) => {
 
                 //阻止默认滑动
-                photoScroll.addEventListener('touchmove', (event) => {
-                    event.preventDefault();
-                }, { passive: false });
+                function stopSlide(e) {
+                    e.preventDefault();
+                }
+                photoScroll.addEventListener('touchmove', stopSlide(event), false);
 
                 //停止没有结束的计时器
                 clearInterval(moveInterval);
@@ -142,6 +144,7 @@ function showAlbum(info, where) {
                 let originalX = event.touches[0].pageX;
                 let originalLeft = parseInt(window.getComputedStyle(photoScroll, null).getPropertyValue("left"));
 
+                //图片跟随手势移动
                 photoScroll.ontouchmove = (event) => {
                     let disX = event.touches[0].pageX - originalX;
                     let currentLeft = originalLeft + disX;
@@ -179,10 +182,16 @@ function showAlbum(info, where) {
                                 break;
                             }
                         }
+    
+                        //取消阻止默认滑动
+                        photoScroll.removeEventListener('touchmove', stopSlide(event));
                     }
                 }
+
             }
         }
+
+        //pc端无效果
         else {
             null;
         }
@@ -585,7 +594,6 @@ function myNavTurn() {
                 let finallyDeg = 0;
     
                 //禁用默认滑动
-
                 myNavs[i].addEventListener('touchmove', (event) => {
                     event.preventDefault();
                 }, { passive: false });
