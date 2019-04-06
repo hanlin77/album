@@ -111,18 +111,18 @@ function showAlbum(info, where) {
 
         //移动端滑动效果
         if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-            
+
             //图片归位
             let moveInterval = null;
             function photoMove(target) {
                 let speed = 0;
                 let left = photoScroll.offsetLeft;
                 moveInterval = setInterval(() => {
-                    speed = (target - photoScroll.offsetLeft)/4;
+                    speed = (target - photoScroll.offsetLeft) / 4;
                     left += speed
                     photoScroll.style.left = left + "px";
 
-                    if(Math.abs(speed) < 1) {
+                    if (Math.abs(speed) < 1) {
                         clearInterval(moveInterval);
                         photoScroll.style.left = target;
                     }
@@ -130,13 +130,14 @@ function showAlbum(info, where) {
 
             }
             //手势翻页效果
-            photoScroll.ontouchstart = (event) => {
+            let photoDiv = photoScroll.parentNode;
+            photoDiv.ontouchstart = (event) => {
 
                 //阻止默认滑动
                 function stopSlide(e) {
                     e.preventDefault();
                 }
-                photoScroll.addEventListener('touchmove', stopSlide(event), false);
+                photoDiv.addEventListener('touchmove', stopSlide(event), false);
 
                 //停止没有结束的计时器
                 clearInterval(moveInterval);
@@ -145,49 +146,48 @@ function showAlbum(info, where) {
                 let originalLeft = parseInt(window.getComputedStyle(photoScroll, null).getPropertyValue("left"));
 
                 //图片跟随手势移动
-                photoScroll.ontouchmove = (event) => {
+                photoDiv.ontouchmove = (event) => {
                     let disX = event.touches[0].pageX - originalX;
                     let currentLeft = originalLeft + disX;
-                    if(currentLeft <= 0) {
+                    if (currentLeft <= 0) {
                         photoScroll.style.left = currentLeft + "px";
                     }
 
-                    photoScroll.ontouchend = () => {
+                    photoDiv.ontouchend = () => {
                         //生成目标值数组
                         let photos = photoScroll.getElementsByTagName("img");
                         let preWidth = 0;
                         let targetLefts = [];
-                        for(let j=0; j<photos.length; j++) {
-                            let photoCenter = preWidth + photos[j].offsetWidth/2;
-                            targetLefts.push(-(photoCenter - photoScroll.offsetWidth/2) > 0 ? 0 : -(photoCenter - photoScroll.offsetWidth/2));
-                            preWidth += photos[j].offsetWidth+10;
+                        for (let j = 0; j < photos.length; j++) {
+                            let photoCenter = preWidth + photos[j].offsetWidth / 2;
+                            targetLefts.push(-(photoCenter - photoScroll.offsetWidth / 2) > 0 ? 0 : -(photoCenter - photoScroll.offsetWidth / 2));
+                            preWidth += photos[j].offsetWidth + 10;
                         }
                         //遍历数组，和当前left进行比较，确定目标值
-                        for(let k=0; k<targetLefts.length; k++) {
-                            if(disX > 0 && targetLefts[targetLefts.length-1-k] > currentLeft) {
-                                photoMove(targetLefts[targetLefts.length-1-k]);
+                        for (let k = 0; k < targetLefts.length; k++) {
+                            if (disX > 0 && targetLefts[targetLefts.length - 1 - k] > currentLeft) {
+                                photoMove(targetLefts[targetLefts.length - 1 - k]);
                                 break;
                             }
-                            if(disX > 0 && targetLefts[0] < currentLeft) {
+                            if (disX > 0 && targetLefts[0] < currentLeft) {
                                 photoMove(targetLefts[0]);
                                 break;
                             }
-                            if(disX < 0 && targetLefts[k] < currentLeft) {
+                            if (disX < 0 && targetLefts[k] < currentLeft) {
                                 photoMove(targetLefts[k]);
                                 break;
                             }
                             //如果当前left超出了最后一个目标值，回到最后一个目标值
-                            if(disX < 0 && targetLefts[targetLefts.length-1] > currentLeft) {
-                                photoMove(targetLefts[targetLefts.length-1]);
+                            if (disX < 0 && targetLefts[targetLefts.length - 1] > currentLeft) {
+                                photoMove(targetLefts[targetLefts.length - 1]);
                                 break;
                             }
                         }
-    
+
                         //取消阻止默认滑动
-                        photoScroll.removeEventListener('touchmove', stopSlide(event));
+                        photoDiv.removeEventListener('touchmove', stopSlide(event));
                     }
                 }
-
             }
         }
 
@@ -406,13 +406,13 @@ function insetHotKeyword() {
 
     let hotPositions = filterBox.getElementsByClassName("hotKeywordsDiv")[0].getElementsByTagName("p");
     let hotTabs = filterBox.getElementsByClassName("hotKeywordsDiv")[1].getElementsByTagName("p");
-    
+
     for (let i = 0; i < hotPositions.length; i++) {
         hotPositions[i].onclick = () => {
             positionFilter(hotPositions[i].innerHTML);
         }
     }
-    
+
     for (let i = 0; i < hotTabs.length; i++) {
         hotTabs[i].onclick = () => {
             tabFilter(hotTabs[i].innerHTML);
@@ -512,46 +512,46 @@ function myNavTurn() {
 
     function pcTurn() {
         for (let i = 0; i < myNavs.length; i++) {
-    
+
             myNavs[i].onmousedown = (event) => {
                 let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
                 let transformArr = currentTransform.split("(")[1].split(",");
                 let originalDeg = getDeg(transformArr[1], transformArr[0]);
-    
+
                 let scrollX = document.documentElement.scrollLeft;
                 let scrollY = document.documentElement.scrollTop;
                 let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
                 let y = 100 + myMenu.offsetTop + myBox.offsetTop - scrollY;
                 let userOriDeg = getDeg(event.clientX + x, y - event.clientY);
                 let addDeg = originalDeg - userOriDeg;
-    
+
                 let finallyDeg = 0;
-    
+
                 document.onmousemove = (event) => {
                     finallyDeg = standardDeg(addDeg + getDeg(event.clientX + x, y - event.clientY));
-    
+
                     myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
                     for (let j = 0; j < myNavs.length; j++) {
                         myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
                         myNavs[j].style.fontWeight = "400";
                     }
                     myNavs[areaX(finallyDeg)].style.fontWeight = "800";
-    
+
                     document.onmouseup = () => {
                         document.onmousemove = null;
-    
+
                         function selectedMyNav(targetDeg) {
                             let selectedMyNavMove = setInterval(() => {
                                 let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
                                 let transformArr = currentTransform.split("(")[1].split(",");
                                 let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
-    
+
                                 let speed = (targetDeg - currentDeg) / 8;
                                 myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
                                 for (let k = 0; k < myNavs.length; k++) {
                                     myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
                                 }
-    
+
                                 if (Math.abs(speed) < 0.6) {
                                     clearInterval(selectedMyNavMove);
                                     myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
@@ -561,10 +561,10 @@ function myNavTurn() {
                                 }
                             }, 20);
                         }
-    
+
                         let targetDegs = [0, 72, 144, -144, -72];
                         selectedMyNav(targetDegs[areaX(finallyDeg)]);
-    
+
                         for (let l = 0; l < myContentBoxs.length; l++) {
                             myContentBoxs[l].style.display = "none";
                         }
@@ -577,12 +577,12 @@ function myNavTurn() {
 
     function mobileTurn() {
         for (let i = 0; i < myNavs.length; i++) {
-    
+
             myNavs[i].ontouchstart = (event) => {
                 let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
                 let transformArr = currentTransform.split("(")[1].split(",");
                 let originalDeg = getDeg(transformArr[1], transformArr[0]);
-    
+
                 let scrollX = document.documentElement.scrollLeft;
                 let scrollY = document.documentElement.scrollTop;
                 let x = -myMenu.offsetLeft - myBox.offsetLeft - 100 + scrollX;
@@ -590,43 +590,45 @@ function myNavTurn() {
                 let touch = event.touches[0];
                 let userOriDeg = getDeg(touch.pageX + x, y - touch.pageY);
                 let addDeg = originalDeg - userOriDeg;
-    
+
                 let finallyDeg = 0;
-    
+
                 //禁用默认滑动
                 myNavs[i].addEventListener('touchmove', (event) => {
                     event.preventDefault();
                 }, { passive: false });
-    
-                myNavs[i].ontouchend = null;
-    
+
+                for (let j = 0; j < myNavs.length; j++) {
+                    myNavs[j].ontouchend = null;
+                }
+
                 myNavs[i].ontouchmove = (event) => {
-    
+
                     touch = event.touches[0];
                     finallyDeg = standardDeg(addDeg + getDeg(touch.pageX + x, y - touch.pageY));
-    
+
                     myMenuCircle.style.transform = "rotate(" + finallyDeg + "deg)";
                     for (let j = 0; j < myNavs.length; j++) {
                         myNavs[j].style.transform = "rotate(" + -finallyDeg + "deg)";
                         myNavs[j].style.fontWeight = "400";
                     }
                     myNavs[areaX(finallyDeg)].style.fontWeight = "800";
-    
+
                     myNavs[i].ontouchend = () => {
                         myNavs[i].ontouchmove = null;
-    
+
                         function selectedMyNav(targetDeg) {
                             let selectedMyNavMove = setInterval(() => {
                                 let currentTransform = window.getComputedStyle(myMenuCircle, null).getPropertyValue("transform");
                                 let transformArr = currentTransform.split("(")[1].split(",");
                                 let currentDeg = standardDeg(getDeg(transformArr[1], transformArr[0]));
-    
+
                                 let speed = (targetDeg - currentDeg) / 8;
                                 myMenuCircle.style.transform = "rotate(" + (currentDeg + speed) + "deg)";
                                 for (let k = 0; k < myNavs.length; k++) {
                                     myNavs[k].style.transform = "rotate(" + -(currentDeg + speed) + "deg)";
                                 }
-    
+
                                 if (Math.abs(speed) < 0.6) {
                                     clearInterval(selectedMyNavMove);
                                     myMenuCircle.style.transform = "rotate(" + targetDeg + "deg)";
@@ -636,10 +638,10 @@ function myNavTurn() {
                                 }
                             }, 20);
                         }
-    
+
                         let targetDegs = [0, 72, 144, -144, -72];
                         selectedMyNav(targetDegs[areaX(finallyDeg)]);
-    
+
                         for (let l = 0; l < myContentBoxs.length; l++) {
                             myContentBoxs[l].style.display = "none";
                         }
@@ -666,13 +668,13 @@ function showMyAlbum() {
 
     let myAlbumContent = myContentBoxs[0].getElementsByClassName("myAlbumContent")[0];
     let myAlbumInfo = [];
-    
+
     for (let i = 0; i < albumInfo.length; i++) {
         if (albumInfo[i].author.id === id18810854185.id) {
             myAlbumInfo.push(albumInfo[i]);
         }
     }
-    
+
     showAlbum(myAlbumInfo, myAlbumContent);
 }
 
